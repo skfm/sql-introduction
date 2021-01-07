@@ -193,3 +193,23 @@ SELECT * FROM 商品 ORDER BY 単価, 商品区分, 商品コード OFFSET 5 FET
 SELECT * FROM 廃藩商品 WHERE 廃番日 >= '2016-12-01' AND 廃番日 <= '2016-12-31' AND 売上個数 > 100 ORDER BY 売上個数 DESC;
 
 SELECT * FROM 廃藩商品 WHERE 廃番日 >= '2016-12-01' AND 廃番日 <= '2016-12-31' UNION SELECT * FROM 廃番商品 WHERE 売上個数 > 100 ORDER BY 6 DESC;
+
+問題31　正解
+廃番商品テーブルから、2016年12月に廃番されたものと、売上個数が100を超えるものを併せて抽出する。一覧は、売上個数の多い順に並べること。
+
+解答31
+SELECT 商品コード FROM EXCEPT SELECT 商品コード FROM 注文 ORDER BY 商品コード;
+
+問題32　
+商品テーブルから、これまでに注文された実績のある商品コードを商品コードの降順に抽出する
+
+解答32
+SELECT 商品コード FROM INTERSECT SELECT 商品コード FROM 注文 ORDER BY 商品コード DESC;
+
+問題33 不正解
+商品区分が「未分類」で単価が1,000円以下と1万円を超える商品について、商品コード、商品名、単価を抽出する。単価の低い順に並べ、同類の場合は商品コードの昇順とする。
+
+解答33
+SELECT 商品コード, 商品名, 単価 FORM 商品 WHERE 商品区分 = '9' AND 単価 <= 1000 UNION SELECT 商品コード, 商品名, 単価 FROM 商品 WHERE 単価 > 10000 ORDER BY 商品コード;
+
+SELECT 商品コード, 商品名, 単価 FORM 商品 WHERE 商品区分 = '9' AND 単価 <= 1000 UNION SELECT 商品コード, 商品名, 単価 FROM 商品 WHERE 商品区分 = '9' AND 単価 > 10000 ORDER BY 商品コード;
